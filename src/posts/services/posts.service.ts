@@ -18,8 +18,6 @@ export class PostsService {
     post.title = createPostDto.title;
     post.content = createPostDto.content;
 
-    this.postsRepository.save(post);
-
-    return post;
+    return await this.postsRepository.save(post);
   }
 }
