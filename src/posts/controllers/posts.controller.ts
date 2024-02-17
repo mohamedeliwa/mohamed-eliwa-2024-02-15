@@ -42,6 +42,11 @@ export class PostsController {
     return await this.postsService.create(user, createPostDto);
   }
 
+  @Get()
+  async find(): Promise<PostEntity[]> {
+    return await this.postsService.find();
+  }
+
   @ApiParam({
     name: 'id',
     required: true,

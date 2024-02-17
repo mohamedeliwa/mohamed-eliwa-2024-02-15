@@ -41,6 +41,14 @@ export class PostsService {
   }
 
   /**
+   * finds and returns all created posts
+   * @returns all posts
+   */
+  async find(): Promise<Post[]> {
+    return await this.postsRepository.find();
+  }
+
+  /**
    * update a post by id
    * @param id - id of the post
    * @param updatePostDto - post data to be updated
