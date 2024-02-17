@@ -34,7 +34,7 @@ export class PostsService {
    * @returns the found post
    */
   async findOne(id: number): Promise<Post> {
-    return await this.postsRepository.findOne({
+    return await this.postsRepository.findOneOrFail({
       where: { id },
       relations: ['author'],
     });
@@ -59,6 +59,20 @@ export class PostsService {
 
     const post = { id, ...updatePostDto };
     return await this.postsRepository.save(post);
+  }
+
+  /**
+   * deletes a post by id
+   * @param id - post's id
+   * @returns the number of affected entities
+   */
+  async delete(user: User, id: number): Promise<number> {
+    // ensuring the user is the post owner beforing deleting
+    const isPostOwner = await this.isPostOwner(user.id, id);
+    if (!isPostOwner) {
+      throw new UnauthorizedException();
+    }
+    return (await this.postsRepository.delete({ id })).affected;
   }
 
   /**

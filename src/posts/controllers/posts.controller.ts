@@ -67,4 +67,19 @@ export class PostsController {
     const user = req.user as User;
     return await this.postsService.update(user, id, updatePostDto);
   }
+
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'id of the post to be deleted',
+  })
+  @Roles(UserRole.ADMIN, UserRole.EDITOR)
+  @Delete(':id')
+  async delete(
+    @Request() req,
+    @Param() { id }: PostParamsDto,
+  ): Promise<number> {
+    const user = req.user as User;
+    return await this.postsService.delete(user, id);
+  }
 }
