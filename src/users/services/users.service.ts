@@ -34,6 +34,24 @@ export class UsersService {
   }
 
   /**
+   * finds a user by id
+   * @param id - user's id
+   * @returns the found user
+   */
+  async findOneById(id: number): Promise<User> {
+    return this.usersRepository.findOneBy({ id });
+  }
+
+  /**
+   * finds a user by username
+   * @param username - user's username
+   * @returns the found user
+   */
+  async findOneByUsername(username: string): Promise<User> {
+    return this.usersRepository.findOneBy({ username });
+  }
+
+  /**
    * @param password plain text password
    * @returns hashed password
    */
