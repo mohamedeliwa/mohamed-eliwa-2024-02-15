@@ -13,13 +13,13 @@ export class CreateUserDto {
   @ApiProperty({
     type: String,
     required: true,
-    minLength: 8,
+    minLength: 6,
     maxLength: 50,
     description: 'username of the user',
   })
   @IsNotEmpty()
   @IsAlpha()
-  @MinLength(8)
+  @MinLength(6)
   @MaxLength(50)
   username: string;
 
