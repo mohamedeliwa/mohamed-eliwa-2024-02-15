@@ -1,17 +1,23 @@
 import {
   Body,
   Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
   Post,
   Request,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { CreatePostDto } from '../dtos/create.post.dto';
 import { PostsService } from '../services/posts.service';
 import { User, UserRole } from 'src/users/entities/user.entity';
 import { Post as PostEntity } from '../entities/post.entity';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { PostParamsDto } from '../dtos/post.params.dto';
+import { UpdatePostDto } from '../dtos/update.post.dto';
 
 @ApiTags('Posts')
 @UsePipes(
@@ -34,5 +40,15 @@ export class PostsController {
   ): Promise<PostEntity> {
     const user = req.user as User;
     return await this.postsService.create(user, createPostDto);
+  }
+
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'id of the post to be returned',
+  })
+  @Get(':id')
+  async findOne(@Param() { id }: PostParamsDto): Promise<PostEntity> {
+    return await this.postsService.findOne(id);
   }
 }
