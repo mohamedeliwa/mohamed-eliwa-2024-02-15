@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
 import { TypeormExceptionFilter } from './typeorm.exception.filter';
 import { APP_FILTER } from '@nestjs/core';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { APP_FILTER } from '@nestjs/core';
     }),
     UsersModule,
     PostsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
