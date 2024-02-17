@@ -1,9 +1,7 @@
 import {
   Body,
   Controller,
-  Get,
   Post,
-  Req,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -11,6 +9,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dtos/create.user.dto';
 import { User } from '../entities/user.entity';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @ApiTags('Users')
 @UsePipes(
@@ -25,6 +24,7 @@ import { User } from '../entities/user.entity';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Public()
   @Post()
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.create(createUserDto);
