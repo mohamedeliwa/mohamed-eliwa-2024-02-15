@@ -34,6 +34,41 @@ export class PostsService {
    * @returns the found post
    */
   async findOne(id: number): Promise<Post> {
-    return await this.postsRepository.findOneByOrFail({ id });
+    return await this.postsRepository.findOne({
+      where: { id },
+      relations: ['author'],
+    });
+  }
+
+  /**
+   * update a post by id
+   * @param id - id of the post
+   * @param updatePostDto - post data to be updated
+   * @returns the updated post object
+   */
+  async update(
+    user: User,
+    id: number,
+    updatePostDto: UpdatePostDto,
+  ): Promise<Post> {
+    // ensuring the user is the post owner beforing updating
+    const isPostOwner = await this.isPostOwner(user.id, id);
+    if (!isPostOwner) {
+      throw new UnauthorizedException();
+    }
+
+    const post = { id, ...updatePostDto };
+    return await this.postsRepository.save(post);
+  }
+
+  /**
+   * checks if a user is a post owner or not
+   * @param userId - user's id
+   * @param postId - post's id
+   * @returns true is the owner, false if not
+   */
+  async isPostOwner(userId: number, postId): Promise<boolean> {
+    const post = await this.findOne(postId);
+    return post.author.id === userId;
   }
 }

@@ -51,4 +51,20 @@ export class PostsController {
   async findOne(@Param() { id }: PostParamsDto): Promise<PostEntity> {
     return await this.postsService.findOne(id);
   }
+
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'id of the post to be updated',
+  })
+  @Roles(UserRole.ADMIN, UserRole.EDITOR)
+  @Patch(':id')
+  async update(
+    @Request() req,
+    @Param() { id }: PostParamsDto,
+    @Body() updatePostDto: UpdatePostDto,
+  ): Promise<PostEntity> {
+    const user = req.user as User;
+    return await this.postsService.update(user, id, updatePostDto);
+  }
 }
