@@ -10,6 +10,20 @@ describe('UsersService', () => {
   let usersRepository: Repository<User>;
 
   const user_repository_token = getRepositoryToken(User);
+  const password = 'plainTextPassword';
+  const hashedPassword = 'hashedPassword';
+
+  const createUserDto: CreateUserDto = {
+    username: 'username',
+    password,
+    role: UserRole.ADMIN,
+  };
+
+  const savedUser: User = {
+    ...createUserDto,
+    id: 1,
+    password: hashedPassword,
+  };
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -30,15 +44,6 @@ describe('UsersService', () => {
   });
 
   describe('Create Method', () => {
-    const password = 'plainTextPassword';
-    const hashedPassword = 'hashedPassword';
-
-    const createUserDto: CreateUserDto = {
-      username: 'username',
-      password,
-      role: UserRole.ADMIN,
-    };
-
     it('should call hashPassword with the right arguments', async () => {
       jest
         .spyOn(service, 'hashPassword')
@@ -58,6 +63,25 @@ describe('UsersService', () => {
     it('should return user with empty password field', async () => {
       const savedUser = await service.create(createUserDto);
       expect(savedUser.password).toEqual('');
+    });
+  });
+
+  describe('findOneByUsername Method', () => {
+    it('should return call userRespository.findOneBy with right arguments', async () => {
+      await service.findOneByUsername(createUserDto.username);
+      expect(usersRepository.findOneBy).toHaveBeenCalledWith({
+        username: createUserDto.username,
+      });
+    });
+
+    it('should return user', async () => {
+      jest
+        .spyOn(usersRepository, 'findOneBy')
+        .mockReturnValueOnce(Promise.resolve(savedUser));
+      const returnedUser = await service.findOneByUsername(
+        createUserDto.username,
+      );
+      expect(returnedUser).toEqual(savedUser);
     });
   });
 });
