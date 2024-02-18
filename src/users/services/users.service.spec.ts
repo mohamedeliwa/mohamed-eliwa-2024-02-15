@@ -4,6 +4,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { User, UserRole } from '../entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../dtos/create.user.dto';
+import * as bcrypt from 'bcrypt';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -82,6 +83,30 @@ describe('UsersService', () => {
         createUserDto.username,
       );
       expect(returnedUser).toEqual(savedUser);
+    });
+  });
+
+  describe('hashPassword Method', () => {
+    const salt = 10;
+    jest.spyOn(bcrypt, 'genSalt').mockImplementation((x) => salt);
+
+    jest
+      .spyOn(bcrypt, 'hash')
+      .mockImplementation((pass, salt) => hashedPassword);
+
+    it('should return call bcrypt.genSalt', async () => {
+      await service.hashPassword(createUserDto.password);
+      expect(bcrypt.genSalt).toHaveBeenCalled();
+    });
+
+    it('should call bcrypt.hash with the right arguments', async () => {
+      await service.hashPassword(createUserDto.password);
+      expect(bcrypt.hash).toHaveBeenCalledWith(createUserDto.password, salt);
+    });
+
+    it('should return the hashed password', async () => {
+      await service.hashPassword(createUserDto.password);
+      expect(bcrypt.hash).toHaveReturnedWith(hashedPassword);
     });
   });
 });
