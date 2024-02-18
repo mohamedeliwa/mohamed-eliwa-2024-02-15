@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { CreatePostDto } from '../dtos/create.post.dto';
 import { User, UserRole } from '../../users/entities/user.entity';
+import { UpdatePostDto } from '../dtos/update.post.dto';
 
 describe('PostsService', () => {
   let service: PostsService;
@@ -23,6 +24,10 @@ describe('PostsService', () => {
   const createPostDto: CreatePostDto = {
     title: 'post title',
     content: 'post conent',
+  };
+
+  const updatePostDto: UpdatePostDto = {
+    title: 'updated post',
   };
 
   const savedPost: Post = {
@@ -92,6 +97,38 @@ describe('PostsService', () => {
     it('should return saved post', async () => {
       const returnedPosts = await service.find();
       expect(returnedPosts).toEqual([savedPost, savedPost]);
+    });
+  });
+
+  describe('Update Post', () => {
+    it('should call service.isPostOwner with right arguments', async () => {
+      jest
+        .spyOn(service, 'isPostOwner')
+        .mockImplementationOnce(() => Promise.resolve(true));
+
+      await service.update(user, savedPost.id, updatePostDto);
+      expect(service.isPostOwner).toHaveBeenCalled();
+    });
+
+    it('should call postsRespository.save with right arguments', async () => {
+      jest
+        .spyOn(service, 'isPostOwner')
+        .mockImplementationOnce(() => Promise.resolve(true));
+
+      await service.update(user, savedPost.id, updatePostDto);
+      expect(postsRepository.save).toHaveBeenCalledWith({
+        id: savedPost.id,
+        ...updatePostDto,
+      });
+    });
+
+    it('should return saved post', async () => {
+      const returnedPosts = await service.update(
+        user,
+        savedPost.id,
+        updatePostDto,
+      );
+      expect(returnedPosts).toEqual(savedPost);
     });
   });
 });
