@@ -41,8 +41,8 @@ describe('PostsService', () => {
           provide: post_repository_token,
           useValue: {
             save: jest.fn(() => savedPost),
-            findOneOrFail: jest.fn(),
-            find: jest.fn(),
+            findOneOrFail: jest.fn(() => savedPost),
+            find: jest.fn(() => [savedPost, savedPost]),
             delete: jest.fn(),
           },
         },
@@ -65,6 +65,33 @@ describe('PostsService', () => {
     it('should return saved post', async () => {
       const returnedPost = await service.create(user, createPostDto);
       expect(returnedPost).toEqual(savedPost);
+    });
+  });
+
+  describe('Find One Post', () => {
+    it('should call postsRespository.findOneOrFail with right arguments', async () => {
+      await service.findOne(savedPost.id);
+      expect(postsRepository.findOneOrFail).toHaveBeenCalledWith({
+        where: { id: savedPost.id },
+        relations: ['author'],
+      });
+    });
+
+    it('should return saved post', async () => {
+      const returnedPost = await service.findOne(savedPost.id);
+      expect(returnedPost).toEqual(savedPost);
+    });
+  });
+
+  describe('Find All Post', () => {
+    it('should call postsRespository.find with right arguments', async () => {
+      await service.find();
+      expect(postsRepository.find).toHaveBeenCalled();
+    });
+
+    it('should return saved post', async () => {
+      const returnedPosts = await service.find();
+      expect(returnedPosts).toEqual([savedPost, savedPost]);
     });
   });
 });
