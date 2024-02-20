@@ -10,7 +10,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 import { CreatePostDto } from '../dtos/create.post.dto';
 import { PostsService } from '../services/posts.service';
 import { User, UserRole } from '../../users/entities/user.entity';
@@ -20,6 +20,7 @@ import { PostParamsDto } from '../dtos/post.params.dto';
 import { UpdatePostDto } from '../dtos/update.post.dto';
 
 @ApiTags('Posts')
+@ApiBearerAuth()
 @UsePipes(
   new ValidationPipe({
     transform: true,
