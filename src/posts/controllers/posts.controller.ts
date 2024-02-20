@@ -13,9 +13,9 @@ import {
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { CreatePostDto } from '../dtos/create.post.dto';
 import { PostsService } from '../services/posts.service';
-import { User, UserRole } from 'src/users/entities/user.entity';
+import { User, UserRole } from '../../users/entities/user.entity';
 import { Post as PostEntity } from '../entities/post.entity';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Roles } from '../../auth/decorators/roles.decorator';
 import { PostParamsDto } from '../dtos/post.params.dto';
 import { UpdatePostDto } from '../dtos/update.post.dto';
 

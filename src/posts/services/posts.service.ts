@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from '../entities/post.entity';
 import { Repository } from 'typeorm';
 import { CreatePostDto } from '../dtos/create.post.dto';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../../users/entities/user.entity';
 import { UpdatePostDto } from '../dtos/update.post.dto';
 
 @Injectable()

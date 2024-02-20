@@ -9,7 +9,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dtos/create.user.dto';
 import { User } from '../entities/user.entity';
-import { Public } from 'src/auth/decorators/public.decorator';
+import { Public } from '../../auth/decorators/public.decorator';
 
 @ApiTags('Users')
 @UsePipes(
