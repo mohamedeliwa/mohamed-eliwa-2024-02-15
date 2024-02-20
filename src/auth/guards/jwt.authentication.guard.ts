@@ -4,6 +4,9 @@ import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 
+/**
+ * A guard for JWT authentication
+ */
 @Injectable()
 export class JwtAuthenticationGuard extends AuthGuard('jwt') {
   constructor(private reflector: Reflector) {

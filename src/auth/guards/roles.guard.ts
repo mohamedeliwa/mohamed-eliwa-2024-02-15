@@ -3,6 +3,9 @@ import { Reflector } from '@nestjs/core';
 import { UserRole } from '../../users/entities/user.entity';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 
+/**
+ * A guard for roles authorization
+ */
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
