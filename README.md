@@ -29,6 +29,8 @@ PGADMIN_DEFAULT_PASSWORD=
 
 please note:
 
+> I added a postman collection for the apis for easy testing. 
+
 > I didn't implement unit testing for every service and every case, I just created enough unit tests to prove a point.
 
 > for e2e testing I tried to use testcontainers but it required to have `docker` command to run without `sudo` command, but I don't have the right to do this on the current machine I use.
